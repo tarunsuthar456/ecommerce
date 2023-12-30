@@ -73,7 +73,8 @@ class CartsController extends Controller{
 
     public function delete($id){
         $productQuantity = $_GET['data'];
-        $this->proobj->updateCol("update products set stock = stock + $productQuantity");
+        $cartsData = $this->cartsobj->runSqlAssoc("select * from carts where id = $id");
+        $this->proobj->updateCol("update products set stock = stock + $productQuantity where id = $cartsData[pro_id]");
         $this->cartsobj->delete($id);
         redirect('carts');
     }
@@ -84,10 +85,16 @@ class CartsController extends Controller{
         $user_id=  $_SESSION['admin']['id'];
             
         $cartsdata = $this->cartsobj->runSqlAssoc("Select * from carts where id = $carts_id and user_id = $user_id ");
+        
+        $productsData = $this->proobj->runSqlAssoc("select stock from products where id = $cartsdata[pro_id]");
+
         // print_r($cartsdata);
         echo $change = $value - $cartsdata['quantity'];
         
         if($value <= 0){
+            redirect('carts');
+        }
+        if($productsData['stock'] <= 0 && $change >= 0 ){
             redirect('carts');
         }
 

@@ -18,7 +18,7 @@ class DashboardController extends Controller{
 
         $sql = "select products.id as pro_id,categories.id as cat_id, products.name, cost,image, categories.name as cat_name, products.name as pro_name,cost,grading,image from categories join cat_products on categories.id = cat_products.cat_id join products on products.id= cat_products.pro_id where hidden='no' order by categories.name ";
 
-    if(isset($_SESSION['admin']) && $_SESSION['admin']['is_admin'] == 'yes'){
+    if(isset($_SESSION['admin'] ['is_admin']) && $_SESSION['admin']['is_admin'] == 'yes'){
         $sql = "select products.id as pro_id,categories.id as cat_id, products.name, cost,image, categories.name as cat_name, products.name as pro_name,cost,grading,image from categories join cat_products on categories.id = cat_products.cat_id join products on products.id= cat_products.pro_id  order by categories.name";
     }
 
