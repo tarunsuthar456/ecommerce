@@ -14,6 +14,7 @@ class Model extends PDO{
         $lbls=implode(',',array_map(fn($v)=>":$v",$keys));
         $sql="insert into $this->table($cols)values($lbls)";
         try{
+
             $this->prepare($sql)->execute($data);
         }
         catch(Exception $e){

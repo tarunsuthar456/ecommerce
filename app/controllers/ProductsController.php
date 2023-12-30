@@ -6,14 +6,25 @@ class ProductsController extends Controller{
         $this->proobj = $this->loadModel('products');
         $this->catobj = $this->loadModel('categories');
         $this->catproducts = $this->loadModel('cat_products');
+        $this->likeObj = $this->loadModel('likes');
     }
+
+
+    // select products.id, categories.id as cat_id, categories.name as cat_name, products.name as pro_name,cost,grading,brand,stock,description,hidden, image from categories join cat_products on categories.id = cat_products.cat_id join products on products.id= cat_products.pro_id  where hidden ='no' order by products.id desc;
+
+
+    // select products.id, categories.id as cat_id, categories.name as cat_name, products.name as pro_name,cost,grading,brand,stock,description,hidden, image from categories join cat_products on categories.id = cat_products.cat_id join products on products.id= cat_products.pro_id  where hidden ='no' order by products.id desc"
+
     public function index(){
         $carts_data = '';
+        $userId = $_SESSION['admin']['id'];
 
-        $sql = "select products.id, categories.id as cat_id, categories.name as cat_name, products.name as pro_name,cost,grading,brand,stock,description,hidden, image from categories join cat_products on categories.id = cat_products.cat_id join products on products.id= cat_products.pro_id where hidden ='no' order by products.id desc;";
+        $likeData = $this->likeObj->runSql("select product_id, user_id from likes where user_id = $userId");
+
+    $sql = "select count(product_id) as total , products.id, categories.id as cat_id, categories.name as cat_name, products.name as pro_name,cost,grading,brand,stock,description,hidden, image from categories join cat_products on categories.id = cat_products.cat_id join products on products.id= cat_products.pro_id left join likes on product_id = products.id where hidden='no' group by products.id  order by products.id desc;";
 
     if(isset($_SESSION['admin']) && $_SESSION['admin']['is_admin'] == 'yes'){
-        $sql = "select products.id, categories.id as cat_id, categories.name as cat_name, products.name as pro_name,cost,grading,brand,stock,description, hidden, image from categories join cat_products on categories.id = cat_products.cat_id join products on products.id= cat_products.pro_id order by products.id desc;";
+        $sql = "select count(product_id) as total , products.id, categories.id as cat_id, categories.name as cat_name, products.name as pro_name,cost,grading,brand,stock,description,hidden, image from categories join cat_products on categories.id = cat_products.cat_id join products on products.id= cat_products.pro_id left join likes on product_id = products.id group by products.id order by products.id desc;";
     }
 
     $data = $this->proobj->runSql($sql);
@@ -22,7 +33,7 @@ class ProductsController extends Controller{
         $userId = $_SESSION['admin']['id'];
         $carts_data = $this->proobj->runSql("Select * from carts where user_id = $userId");
     }
-        $this->load->view('products.index', compact('data','carts_data'));
+        $this->load->view('products.index', compact('data','carts_data','likeData'));
     }
 
     public function create(){
@@ -182,6 +193,24 @@ class ProductsController extends Controller{
     }
     }
 
+    public function like($pro_id){
+        $userId = $_SESSION['admin']['id'];
+        $info = [
+            'product_id' => $pro_id,
+            'user_id' => $userId
+        ];
+        // print_r($info);
+
+        $likeData = $this->likeObj->runSql("select * from likes where product_id=$pro_id and user_id = $userId");
+
+        if(!(isset($likeData) && $likeData)){
+            $this->likeObj->create($info);
+        }
+        else{
+        $this->likeObj->delete($likeData[0]['id']);
+        }
+        redirect('products');
+    }
 }
 
 ?>

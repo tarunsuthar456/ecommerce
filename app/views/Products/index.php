@@ -1,6 +1,8 @@
 <a class="btn btn-primary" href="<?=ROOT?>products">All products</a>
 
 <?php 
+// print_r($likeData);
+$newLikeData = array_column($likeData,'product_id');
 
 if(isset($message) && $message){
     ?>
@@ -82,7 +84,7 @@ if(isset($_SESSION['admin'])  && $_SESSION['admin']) {?>
         
     <tr>
         <td><?=$index++?></td>
-        <td><?=$value['cat_name']?></td>
+        <td><?=$value['cat_name']?> <span style="float:right"><button id='btn<?=$value['id']?>' class="<?=(in_array($value['id'],$newLikeData)) ?"btn btn-secondary":"btn btn-info" ?>" onclick="like(<?=$value['id']?>)"> <?=(in_array($value['id'],$newLikeData)) ?"Unlike":"Like" ?> </button> (<?=$value['total']?>)</span></td>
         <td><?=$value['brand']?></td>
         <td><?=($value['stock']<=0)?" <span style='color:red'> $value[pro_name] -- Out of stock</span>":"$value[pro_name]"?></td>
         <td><?=$value['description']?></td>
@@ -152,6 +154,34 @@ const ROOTS = "http://localhost/mvc/";
     })
 
 }
+
+function like(pro_id){
+    location.href=`${ROOT}products/like/${pro_id}`;
+}
+
+
+// function like(pro_id){
+//     $.ajax({
+//         type:'get',
+//         url:`${ROOT}products/like/${pro_id}`,
+//         success:function(result){
+//             const trimmed = result.trim()
+//             alert(trimmed.length);
+//             if(trimmed == "product unliked"){
+//                 `btn${pro_id}`.innerHTML = 'liked';
+//             }
+//             else{
+//                 console.log("liked");
+
+//                 `btn${pro_id}`.innerHTML = 'Unliked';
+//             }
+            
+//         },
+//         error:function(error){
+//             console.log(error);
+//         }
+//     })
+// }
 
 function hello(value){
 const ROOTS = "http://localhost/mvc/";
