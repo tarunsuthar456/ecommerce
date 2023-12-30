@@ -83,8 +83,24 @@ if(isset($_SESSION['admin'])  && $_SESSION['admin']) {?>
         ?>
         
     <tr>
+  <!-- ❤️ Like -->
+  <!-- <i class='fas fa-heart'></i>
+  <i class="far fa-heart"></i> -->
         <td><?=$index++?></td>
-        <td><?=$value['cat_name']?> <span style="float:right"><button id='btn<?=$value['id']?>' class="<?=(in_array($value['id'],$newLikeData)) ?"btn btn-secondary":"btn btn-info" ?>" onclick="like(<?=$value['id']?>)"> <?=(in_array($value['id'],$newLikeData)) ?"Unlike":"Like" ?> </button> (<?=$value['total']?>)</span></td>
+        <td><?=$value['cat_name']?> 
+    
+        <span style="float:right">
+            <?php if(isset($_SESSION['admin']) && $_SESSION['admin']){ ?>
+            <button id='btn<?=$value['id']?>' class="<?=(in_array($value['id'],$newLikeData)) ?"btn btn-danger":"btn btn-outline-danger" ?>" onclick="like(<?=$value['id']?>)">
+                <i class="<?=(in_array($value['id'],$newLikeData)) ?"fas fa-heart":"far fa-heart" ?>"></i>
+            </button> <span class="bg-warning p-1 m-2 pb-2 btn btn-outline-danger rounded"><?=$value['total']?></span>
+            <?php } else{ ?>
+                <div class="bg-warning p-1 btn btn-outline-danger rounded"><?=$value['total']?> likes<div>
+            <?php }?>
+
+            </span>
+        
+        </td>
         <td><?=$value['brand']?></td>
         <td><?=($value['stock']<=0)?" <span style='color:red'> $value[pro_name] -- Out of stock</span>":"$value[pro_name]"?></td>
         <td><?=$value['description']?></td>
