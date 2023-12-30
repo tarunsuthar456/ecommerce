@@ -25,10 +25,14 @@ class ProductsController extends Controller{
         else{
         $likeData = $this->likeObj->runSql("select product_id, user_id from likes ");
         }
-    $sql = "select count(product_id) as total , products.id, categories.id as cat_id, categories.name as cat_name, products.name as pro_name,cost,grading,brand,stock,description,hidden, image from categories join cat_products on categories.id = cat_products.cat_id join products on products.id= cat_products.pro_id left join likes on product_id = products.id where hidden='no' group by products.id  order by products.id desc;";
+
+        // (fetching with categories)
+        // select count(product_id) as total , products.id, categories.id as cat_id, categories.name as cat_name, products.name as pro_name,cost,grading,brand,stock,description,hidden, image from categories join cat_products on categories.id = cat_products.cat_id join products on products.id= cat_products.pro_id left join likes on product_id = products.id where hidden='no' group by products.id  order by products.id desc
+
+    $sql = "select count(product_id) as total , products.id, products.name as pro_name,cost,grading,brand,stock,description,hidden, image from  products left join likes on product_id = products.id where hidden='no' group by products.id  order by products.id desc;;";
 
     if(isset($_SESSION['admin'] ['is_admin']) && $_SESSION['admin']['is_admin'] == 'yes'){
-        $sql = "select count(product_id) as total , products.id, categories.id as cat_id, categories.name as cat_name, products.name as pro_name,cost,grading,brand,stock,description,hidden, image from categories join cat_products on categories.id = cat_products.cat_id join products on products.id= cat_products.pro_id left join likes on product_id = products.id group by products.id order by products.id desc;";
+        $sql = "select count(product_id) as total , products.id, products.name as pro_name,cost,grading,brand,stock,description,hidden, image from  products left join likes on product_id = products.id group by products.id  order by products.id desc;;";
     }
 
     $data = $this->proobj->runSql($sql);
@@ -145,7 +149,7 @@ class ProductsController extends Controller{
 
     public function delete($id){
         // echo $id;
-        $this->catobj->runSql("Delete from cat_products where pro _id = $id");
+        $this->catobj->runSql("Delete from cat_products where pro_id = $id");
         $this->proobj->delete($id);
         redirect('products');
         

@@ -52,7 +52,6 @@ if(isset($_SESSION['admin'])  && $_SESSION['admin']) {?>
 <table class='table table-bordered'>
     <tr>
         <th>S.No.</th>
-        <th>Category Name</th>
         <th>Brand</th>
         <th>Product Name</th>
         <th>Description</th>
@@ -87,8 +86,14 @@ if(isset($_SESSION['admin'])  && $_SESSION['admin']) {?>
   <!-- <i class='fas fa-heart'></i> -->
   <!-- <i class="far fa-heart">3</i> -->
         <td><?=$index++?></td>
-        <td><?=$value['cat_name']?> 
-    
+        <td><?=$value['brand']?></td>
+        <td>
+        <div>
+        <div>    
+        <?=($value['stock']<=0)?" <span style='color:red'> $value[pro_name] -- Out of stock</span>":"$value[pro_name]"?>
+        </div>
+
+        <div style="float:left">
         <span style="float:right">
             <?php if(isset($_SESSION['admin']) && $_SESSION['admin']){ ?>
             <button id='btn<?=$value['id']?>' class="<?=(in_array($value['id'],$newLikeData)) ?"btn btn-danger":"btn btn-outline-danger" ?>" onclick="like(<?=$value['id']?>)">
@@ -99,10 +104,9 @@ if(isset($_SESSION['admin'])  && $_SESSION['admin']) {?>
             <?php }?>
 
             </span>
-        
+            </div>
+            </div>
         </td>
-        <td><?=$value['brand']?></td>
-        <td><?=($value['stock']<=0)?" <span style='color:red'> $value[pro_name] -- Out of stock</span>":"$value[pro_name]"?></td>
         <td><?=$value['description']?></td>
         <td><?=$value['cost']?></td>
         <td><?=$value['grading']?></td>
@@ -112,7 +116,7 @@ if(isset($_SESSION['admin'])  && $_SESSION['admin']) {?>
             <td><?=$value['stock']?></td>
             <td> <a class='btn btn-primary' href="<?=ROOT?>products/edit/<?=$value['id']?>">Edit</a></td>
             <td> <a class='btn btn-danger' href="<?=ROOT?>products/hide/<?=$value['id']?>"><?=($value['hidden'] == 'no')?"Hide":"Unhide"?></a></td>
-            <td> <a class='btn btn-danger' href="<?=ROOT?>categories/delete/<?=$value['cat_id']?>?proId=<?=$value['id']?>">Delete</a></td>
+            <td> <a class='btn btn-danger' href="<?=ROOT?>products/delete/<?=$value['id']?>">Delete</a></td>
         <?php } ?>
         
         <?php
@@ -209,3 +213,22 @@ const ROOTS = "http://localhost/mvc/";
     location.href=`${ROOTS}products/singleProduct/${value}`;
 }
     </script>
+
+
+
+
+
+
+<!-- 
+
+        <span style="float:right">
+        <?php if(isset($_SESSION['admin']) && $_SESSION['admin']){ ?>
+            <button id='btn<?=$value['id']?>' class="<?=(in_array($value['id'],$newLikeData)) ?"btn btn-danger":"btn btn-outline-danger" ?>" onclick="like(<?=$value['id']?>)">
+                <i class="<?=(in_array($value['id'],$newLikeData)) ?"fas fa-heart":"far fa-heart" ?>"></i>
+            </button> <span class="bg-warning p-1 m-2 pb-2 btn btn-outline-danger rounded"><i class="far fa-heart"><?=$value['total']?></i></span>
+            <?php } else{ ?>
+                <div class="bg-warning p-1 btn btn-outline-danger rounded"> <i class="far fa-heart"><?=$value['total']?></i> <div>
+            <?php }?>
+
+            </span>
+ -->

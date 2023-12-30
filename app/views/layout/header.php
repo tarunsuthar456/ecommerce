@@ -52,7 +52,7 @@ $obj = (new mysqli('localhost','root','','ecommerce'))->query("select * from cat
       <br>   
 
       <li class="nav-item">
-        <a href="<?=ROOT?>/carts/index" class="nav-link active" aria-current="page">
+        <a href="<?=ROOT?>carts/index" class="nav-link active" aria-current="page">
           <svg class="bi me-4" width="18" height="16"><use xlink:href="#home"/></svg>
           Carts
         </a>
@@ -64,16 +64,15 @@ $obj = (new mysqli('localhost','root','','ecommerce'))->query("select * from cat
         
       <div class="dropdown mt-4 bg-warning "  >
 
-      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+      <a href="#cat" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
             <div class='mx-4 p-2' >
               <strong>Categories</strong>
             </div>
       </a>
 
 
-      <ul class="dropdown-menu dropdown-menu-dark text-small shadow " aria-labelledby="dropdownUser1">
-          <li><a class="dropdown-item " href="<?=ROOT?>/dashboard/index">All Categories</a></li>
-
+      <ul id="cat" class="dropdown-menu dropdown-menu-dark text-small shadow " aria-labelledby="dropdownUser1">
+        <li><a class="dropdown-item" href="<?=ROOT?>/dashboard/index">All Categories</a></li>
           <?php foreach($obj as $value){ ?>        
             <li><a class="dropdown-item " href="<?=ROOT?>/dashboard/index?id=<?=$value['id']?>"><?=$value['name']?></a></li>
           <?php } ?>
