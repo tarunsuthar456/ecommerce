@@ -84,8 +84,8 @@ if(isset($_SESSION['admin'])  && $_SESSION['admin']) {?>
         
     <tr>
   <!-- ❤️ Like -->
-  <!-- <i class='fas fa-heart'></i>
-  <i class="far fa-heart"></i> -->
+  <!-- <i class='fas fa-heart'></i> -->
+  <!-- <i class="far fa-heart">3</i> -->
         <td><?=$index++?></td>
         <td><?=$value['cat_name']?> 
     
@@ -93,9 +93,9 @@ if(isset($_SESSION['admin'])  && $_SESSION['admin']) {?>
             <?php if(isset($_SESSION['admin']) && $_SESSION['admin']){ ?>
             <button id='btn<?=$value['id']?>' class="<?=(in_array($value['id'],$newLikeData)) ?"btn btn-danger":"btn btn-outline-danger" ?>" onclick="like(<?=$value['id']?>)">
                 <i class="<?=(in_array($value['id'],$newLikeData)) ?"fas fa-heart":"far fa-heart" ?>"></i>
-            </button> <span class="bg-warning p-1 m-2 pb-2 btn btn-outline-danger rounded"><?=$value['total']?></span>
+            </button> <span class="bg-warning p-1 m-2 pb-2 btn btn-outline-danger rounded"><i class="far fa-heart"><?=$value['total']?></i></span>
             <?php } else{ ?>
-                <div class="bg-warning p-1 btn btn-outline-danger rounded"><?=$value['total']?> likes<div>
+                <div class="bg-warning p-1 btn btn-outline-danger rounded"> <i class="far fa-heart"><?=$value['total']?></i> <div>
             <?php }?>
 
             </span>
@@ -116,11 +116,15 @@ if(isset($_SESSION['admin'])  && $_SESSION['admin']) {?>
         <?php } ?>
         
         <?php
-            if((isset($_SESSION['admin'])  && $_SESSION['admin']) && !($value['stock'] <= 0 )) {?>
-            <td> <a class='btn btn-warning' href="<?=ROOT?>carts/store/<?=$value['id']?>">Add to cart</a></td>
+            if(isset($_SESSION['admin'])  && $_SESSION['admin'])  {?>
+                <?php if(($value['stock'] <= 0 )){?>
+                    <td> <a class='btn btn-warning' href="javascript:alert('This is out of stock')">Add to cart</a></td>
+                <?php } else{?>
+                    <td> <a class='btn btn-warning' href="<?=ROOT?>carts/store/<?=$value['id']?>">Add to cart</a></td>
 
-        <?php } else{ ?>
-            <td> <a class='btn btn-warning' href="javascript:alert('This is out of stock')">Add to cart</a></td>
+                <?php } ?>
+            <?php } else{ ?>
+            <!-- <td> <a class='btn btn-warning' href="javascript:alert('This is out of stock')">Add to cart</a></td> -->
             
         <?php } ?>
     </tr>

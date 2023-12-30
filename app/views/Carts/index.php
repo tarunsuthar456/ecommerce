@@ -16,7 +16,7 @@
         <br>
         Total Price: <?= $value['total_price']?>
         <br>
-        <a href='<?=ROOT?>carts/delete/<?=$value['carts_id']?>'  class='btn btn-primary'>Delete</a>
+        <a href='<?=ROOT?>carts/delete/<?=$value['carts_id']?>?data=<?=$value['quantity']?>'  class='btn btn-primary'>Delete</a>
     </div>
     <?php } ?>
     
