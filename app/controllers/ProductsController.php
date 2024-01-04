@@ -96,6 +96,7 @@ class ProductsController extends Controller{
         $catdata= $this->catobj->all();
         $info  = $this->proobj->runSql("select products.id, categories.name as cat_name, products.name as pro_name,cost,brand,description,stock,grading,image from categories join cat_products on categories.id = cat_products.cat_id join products on products.id= cat_products.pro_id where products.id=$id");
         // $info = $info[0];
+
         $category_data = array_column($info,'cat_name');
         $this->load->view('products.edit',compact('info','catdata','category_data'));
     }
@@ -130,7 +131,8 @@ class ProductsController extends Controller{
     }
         $this->proobj->update($info,$id);
 
-        $this->proobj->runSql("delete from cat_products where pro_id = $id");
+        $this->catproducts->deleteCol("delete from cat_products where pro_id = $id");
+        
         $totalCat = request('cat_id');
 
         for($i= 0 ;$i <count($totalCat); $i++){
@@ -149,7 +151,7 @@ class ProductsController extends Controller{
 
     public function delete($id){
         // echo $id;
-        $this->catobj->runSql("Delete from cat_products where pro_id = $id");
+        // $this->catobj->runSql("Delete from cat_products where pro_id = $id");
         $this->proobj->delete($id);
         redirect('products');
         
@@ -183,15 +185,20 @@ class ProductsController extends Controller{
     function singleProduct(){
         // echo $name;
         $name = request('search');
-        $sql = "select products.id, categories.id as cat_id, categories.name as cat_name, products.name as pro_name,cost,grading,description, brand, image from categories join cat_products on categories.id = cat_products.cat_id join products on products.id= cat_products.pro_id where products.name like '%$name%' order by products.id desc";
+        $sql = "select products.id, categories.id as cat_id, categories.name as cat_name, products.name as pro_name,cost,grading,description, brand, image from categories join cat_products on categories.id = cat_products.cat_id join products on products.id= cat_products.pro_id where products.name like '%$name%' group by products.name order by products.id desc";
         $category = $this->proobj->runSql($sql);
+
+        $proId = $category[0]['id'];
+        $allCategories = $this->catproducts->runSql("Select name from cat_products join categories on cat_products.cat_id = categories.id where pro_id = $proId");
+        
         $totalcategories = "";
         $message = false;
 
         if($category){
-            foreach($category as $value)
-            $totalcategories.= $value['cat_name']. ' ,';
-
+            foreach($allCategories as $value){
+                $totalcategories.= $value['name']. ' ,';
+            }
+            
             $totalcategories = rtrim($totalcategories, ',');
         $this->load->view('products.single',compact('category','totalcategories','message','name'));
     }

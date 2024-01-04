@@ -39,7 +39,7 @@ class CartsController extends Controller{
         
         if($cartsdata){
             print_r($cartsdata);
-            $this->cartsobj->runSql("update carts set quantity = carts.quantity +1, total_price = price * quantity where pro_id = $id and user_id = $user_id");
+            $this->cartsobj->updateCol("update carts set quantity = carts.quantity +1, total_price = price * quantity where pro_id = $id and user_id = $user_id");
 
             $this->proobj->updateCol("update products set stock = stock-1 where id=$id");
             redirect('products');
@@ -89,17 +89,17 @@ class CartsController extends Controller{
         $productsData = $this->proobj->runSqlAssoc("select stock from products where id = $cartsdata[pro_id]");
 
         // print_r($cartsdata);
-        echo $change = $value - $cartsdata['quantity'];
-        
+        $change = $value - $cartsdata['quantity'];
         if($value <= 0){
             redirect('carts');
+            exit();
         }
         if($productsData['stock'] <= 0 && $change >= 0 ){
             redirect('carts');
         }
 
         else{
-        $this->cartsobj->runSql("update carts set quantity = $value, total_price = price * quantity where id = $carts_id");
+        $this->cartsobj->updateCol("update carts set quantity = $value, total_price = price * quantity where id = $carts_id");
         $this->proobj->updateCol("update products set stock = stock - $change where id = $cartsdata[pro_id]");
         redirect('carts');
         }

@@ -84,7 +84,7 @@ class OrdersController extends Controller{
             $this->orderobj->create($info);
         }
         
-            $this->cartsobj->runSql("delete from carts where user_id = $userId");
+            $this->cartsobj->deleteCol("delete from carts where user_id = $userId");
                 
             redirect('orders/about');
 

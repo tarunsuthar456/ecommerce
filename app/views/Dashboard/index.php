@@ -18,7 +18,7 @@
         <br>
         Grading: <?= $value['grading']?>
         <br>
-        Category: <?= $value['cat_name']?>
+        Category: <?= $value[0]?>
     </div>
     <?php } ?>
 </div>

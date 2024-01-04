@@ -79,7 +79,10 @@ class Model extends PDO{
         $rs = $this->prepare($sql);
         $rs->execute();
     }
-
+    public function deleteCol($sql){
+        $rs = $this->prepare($sql);
+        $rs->execute();
+    }
     function find($id,array|string $cols = "*")
     {
         if (is_array($cols)) {
