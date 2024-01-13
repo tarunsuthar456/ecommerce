@@ -89,7 +89,12 @@ class CartsController extends Controller{
         $productsData = $this->proobj->runSqlAssoc("select stock from products where id = $cartsdata[pro_id]");
 
         // print_r($cartsdata);
+
+        if(isset($value)){
+            redirect('carts');
+        }
         $change = $value - $cartsdata['quantity'];
+        
         if($value <= 0){
             redirect('carts');
             exit();
